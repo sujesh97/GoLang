@@ -37,8 +37,9 @@ func main() {
 	fmt.Println(" Name", responseObject.Name)
 	fmt.Println(" NUmber of char ", len(responseObject.Character))
 
+	fmt.Println("All the Char name and their Mac power level ")
 	for i := 0; i < len(responseObject.Character); i++ {
-		fmt.Println("All the Char name and their Mac power level ", responseObject.Character[i].CharName, responseObject.Character[i].MaxPower)
+		fmt.Println(responseObject.Character[i].CharName, responseObject.Character[i].MaxPower)
 		if responseObject.Character[i].CharName == "Iron man" {
 			fmt.Println("Requested power of char is ", responseObject.Character[i].MaxPower)
 		}
