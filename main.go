@@ -18,6 +18,11 @@ type Character struct {
 	MaxPower int    `json:"max_power"`
 }
 
+type newStruct struct {
+	name     string
+	maxpower int
+}
+
 func main() {
 	links := []string{
 		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b", //avenger
@@ -53,7 +58,7 @@ func checkUrl(url string, c chan string, wg *sync.WaitGroup) {
 		c <- "We could not reach:" + url
 
 	} else {
-		//		fmt.Println(string(data))
+		//fmt.Println(string(data))
 
 		var responseObject Response
 		json.Unmarshal(data, &responseObject)
@@ -61,12 +66,13 @@ func checkUrl(url string, c chan string, wg *sync.WaitGroup) {
 		fmt.Println("Name", responseObject.Name)
 		fmt.Println("NUmber of char", len(responseObject.Character))
 
-		fmt.Println("All the", responseObject.Name, " name and their Mac power level ")
+		fmt.Println("All the", responseObject.Name, "name and their Max power level ")
 		for i := 0; i < len(responseObject.Character); i++ {
-			fmt.Println(responseObject.Character[i].CharName, responseObject.Character[i].MaxPower)
-			// if responseObject.Character[i].CharName == "Iron man" {
-			// 	fmt.Println("Requested power of char is ", responseObject.Character[i].MaxPower)
-			// }
+			Marvel := newStruct{
+				name:     string(responseObject.Character[i].CharName),
+				maxpower: int(responseObject.Character[i].MaxPower),
+			}
+			fmt.Println(Marvel)
 		}
 		fmt.Println()
 	}
