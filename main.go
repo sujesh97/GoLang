@@ -20,10 +20,9 @@ type Character struct {
 
 func main() {
 	links := []string{
-		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b",
-
-		"http://www.mocky.io/v2/5ecfd6473200009dc1e3d64e",
-		"http://www.mocky.io/v2/5ecfd630320000f1aee3d64d",
+		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b",  //avenger
+		"http://www.mocky.io/v2/5ecfd6473200009dc1e3d64e",  //mutant
+		" http://www.mocky.io/v2/5ed38822340000810001f377", //anti hero
 	}
 
 	checkUrls(links)
@@ -59,8 +58,8 @@ func checkUrl(url string, c chan string, wg *sync.WaitGroup) {
 		var responseObject Response
 		json.Unmarshal(data, &responseObject)
 
-		fmt.Println(" Name", responseObject.Name)
-		fmt.Println(" NUmber of char ", len(responseObject.Character))
+		fmt.Println("Name", responseObject.Name)
+		fmt.Println("NUmber of char", len(responseObject.Character))
 
 		fmt.Println("All the", responseObject.Name, " name and their Mac power level ")
 		for i := 0; i < len(responseObject.Character); i++ {
