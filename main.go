@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sync"
 )
 
 type Response struct {
@@ -18,32 +19,56 @@ type Character struct {
 }
 
 func main() {
+	links := []string{
+		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b",
 
-	response, err := http.Get("http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b")
-	if err != nil {
-		fmt.Println("request failed with error %s \n", err)
+		"http://www.mocky.io/v2/5ecfd6473200009dc1e3d64e",
+		"http://www.mocky.io/v2/5ecfd630320000f1aee3d64d",
 	}
 
+	checkUrls(links)
+}
+
+func checkUrls(urls []string) {
+	c := make(chan string)
+	var wg sync.WaitGroup
+
+	for _, link := range urls {
+		wg.Add(1)
+		go checkUrl(link, c, &wg)
+	}
+	go func() {
+		wg.Wait()
+		close(c)
+	}()
+	for msg := range c {
+		fmt.Println(msg)
+	}
+}
+
+func checkUrl(url string, c chan string, wg *sync.WaitGroup) {
+	defer (*wg).Done()
+	response, err := http.Get(url)
 	data, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
-		fmt.Println("request failed with error %s \n", err)
-	}
-	fmt.Println(string(data))
+		c <- "We could not reach:" + url
 
-	var responseObject Response
-	json.Unmarshal(data, &responseObject)
+	} else {
+		//		fmt.Println(string(data))
 
-	fmt.Println(" Name", responseObject.Name)
-	fmt.Println(" NUmber of char ", len(responseObject.Character))
+		var responseObject Response
+		json.Unmarshal(data, &responseObject)
 
-	fmt.Println("All the Char name and their Mac power level ")
-	for i := 0; i < len(responseObject.Character); i++ {
-		fmt.Println(responseObject.Character[i].CharName, responseObject.Character[i].MaxPower)
-		if responseObject.Character[i].CharName == "Iron man" {
-			fmt.Println("Requested power of char is ", responseObject.Character[i].MaxPower)
+		fmt.Println(" Name", responseObject.Name)
+		fmt.Println(" NUmber of char ", len(responseObject.Character))
+
+		fmt.Println("All the", responseObject.Name, " name and their Mac power level ")
+		for i := 0; i < len(responseObject.Character); i++ {
+			fmt.Println(responseObject.Character[i].CharName, responseObject.Character[i].MaxPower)
+			// if responseObject.Character[i].CharName == "Iron man" {
+			// 	fmt.Println("Requested power of char is ", responseObject.Character[i].MaxPower)
+			// }
 		}
-
+		fmt.Println()
 	}
-
 }
