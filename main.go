@@ -25,9 +25,9 @@ type newStruct struct {
 
 func main() {
 	links := []string{
-		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b", //avenger
-		"http://www.mocky.io/v2/5ecfd6473200009dc1e3d64e", //mutant
-		"http://www.mocky.io/v2/5ed38822340000810001f377", //anti hero
+		"http://www.mocky.io/v2/5ecfd5dc3200006200e3d64b",
+		"http://www.mocky.io/v2/5ecfd6473200009dc1e3d64e",
+		"http://www.mocky.io/v2/5ed38822340000810001f377",
 	}
 
 	checkUrls(links)
