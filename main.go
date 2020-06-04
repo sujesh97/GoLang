@@ -59,7 +59,6 @@ func checkUrl(url string, c chan string, wg *sync.WaitGroup) {
 
 	} else {
 		//fmt.Println(string(data))
-
 		var responseObject Response
 		json.Unmarshal(data, &responseObject)
 
